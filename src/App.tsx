@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import type { Schema } from "../amplify/data/resource";
 import { generateClient } from "aws-amplify/data";
+import Newtodo from "./pages/Newtodo"
+
 
 const client = generateClient<Schema>();
 
@@ -17,13 +19,20 @@ function App() {
     client.models.Todo.create({ content: window.prompt("Todo content") });
   }
 
+  function deleteTodo(id: string) {
+    client.models.Todo.delete({ id })
+  }
+
   return (
     <main>
+      <Newtodo />
       <h1>My todos</h1>
       <button onClick={createTodo}>+ new</button>
       <ul>
         {todos.map((todo) => (
-          <li key={todo.id}>{todo.content}</li>
+          <li 
+          onClick={() => deleteTodo(todo.id)}
+          key={todo.id}>{todo.content}</li>
         ))}
       </ul>
       <div>
